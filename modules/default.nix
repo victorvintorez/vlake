@@ -1,1 +1,1 @@
-_: { imports = [ ./hardware ./system ]; }
+_: { imports = [ ./cli ./gui ./hardware ./services ./system ]; }

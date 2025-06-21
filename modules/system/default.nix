@@ -9,7 +9,10 @@ _: {
     ./networking.nix
     ./nix.nix
     ./oomd.nix
+    ./pipewire.nix
+    ./secretservice.nix
     ./security.nix
+    ./ssh.nix
     ./system.nix
   ];
 }

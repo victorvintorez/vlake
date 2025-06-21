@@ -14,7 +14,7 @@ in {
       type = submodule {
         options = {
           enable = mkEnableOption "Enable Yubikey Support";
-          type = mkOption {
+          pamType = mkOption {
             description = "Yubikey Auth Implementation";
             type = enum [ "2ndFactor" "passwordless" ];
           };
@@ -38,8 +38,10 @@ in {
           settings = { cue = true; };
         };
         services = {
-          login.u2fAuth = true;
-          sudo.u2fAuth = true;
+          login.fprintAuth = cfg.enableFingerprint;
+          sudo.fprintAuth = cfg.enableFingerprint;
+          login.u2fAuth = cfg.yubikey.enable;
+          sudo.u2fAuth = cfg.yubikey.enable;
         };
       };
       polkit = { enable = true; };
@@ -52,5 +54,19 @@ in {
         ENV{ID_VENDOR}=="Yubico",\
         RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
     '';
+
+    systemd.services.fprintd = mkIf cfg.enableFingerprint {
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.Type = "simple";
+    };
+    services.fprintd.enable = cfg.enableFingerprint;
+
+    programs.yubikey-touch-detector = mkIf cfg.yubikey.enable {
+      enable = true;
+      libnotify = false;
+      unixSocket = false;
+    };
+    environment.systemPackages =
+      mkIf cfg.yubikey.enable (with pkgs; [ yubikey-manager ]);
   };
 }

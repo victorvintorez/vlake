@@ -33,5 +33,7 @@ in {
       services.NetworkManager-wait-online.wantedBy = mkForce [ ];
     };
     users.users.${username} = { extraGroups = [ "networkManager" ]; };
+
+    programs.nm-applet.enable = config.vlake.gui.enable;
   };
 }

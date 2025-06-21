@@ -51,11 +51,6 @@ in {
       cudaSupport = true;
     };
 
-    system.switch = {
-      enable = true;
-      enableNg = true;
-    };
-
     # Nix Tools
     users.users.${username}.packages = with pkgs; [ nix-index ];
   };
