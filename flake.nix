@@ -20,8 +20,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    hjem = {
+      url = "github:feel-co/hjem";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

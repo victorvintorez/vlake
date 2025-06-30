@@ -12,23 +12,12 @@ let
     lib.nixosSystem {
       system = null;
       specialArgs = { inherit lib inputs self; };
-      modules = [ hostDir ../modules ./common/core ] ++ extraModules;
+      modules = [ hostDir ../modules ] ++ extraModules;
     };
-
-  desktop = createHost [ ./common/desktop ];
 
   createHosts = hosts:
     listToAttrs (map (host: {
-      name = (getSystemConfig host.dir).vlake.system.hostname;
-      value = host.type host.dir;
+      name = (getSystemConfig host).vlake.system.hostname;
+      value = createHost [ ];
     }) hosts);
-in createHosts [
-  {
-    dir = ./supernova;
-    type = desktop;
-  }
-  {
-    dir = ./wormhole;
-    type = desktop;
-  }
-]
+in createHosts [ ./supernova ./wormhole ]

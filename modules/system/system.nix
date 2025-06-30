@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, inputs, ... }:
 let
   cfg = config.vlake.system;
 
@@ -23,12 +23,23 @@ in {
     };
   };
 
+  imports = [ inputs.hjem.nixosModules.default ];
+
   config = {
     networking.hostName = cfg.hostname;
 
     users.users.${cfg.username} = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
+    };
+
+    hjem = {
+      users.${cfg.username} = {
+        enable = true;
+        directory = "/home/${cfg.username}";
+        user = cfg.username;
+      };
+      clobberByDefault = true;
     };
 
     nixpkgs.hostPlatform = cfg.platform;
