@@ -43,6 +43,9 @@ in {
     vlake.system.networking.enable = mkForce true;
     vlake.system.nix.enable = mkForce true;
     vlake.system.oomd.enable = mkForce true;
+    vlake.system.pipewire.enable = mkForce true;
+    vlake.system.secretservice.enable = mkForce true;
     vlake.system.security.enable = mkForce true;
+    vlake.system.ssh.enable = mkForce true;
   };
 }

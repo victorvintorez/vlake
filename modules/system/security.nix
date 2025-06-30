@@ -2,8 +2,9 @@
 let
   cfg = config.vlake.system.security;
 
+  inherit (lib) concatStrings;
   inherit (lib.options) mkEnableOption mkOption;
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkMerge;
   inherit (lib.types) submodule enum;
 in {
   options.vlake.system.security = {
@@ -35,7 +36,16 @@ in {
             "sufficient"
           else
             "optional";
-          settings = { cue = true; };
+          settings = {
+            interactive = false;
+            cue = true;
+            origin = "pam://yubico";
+            authfile = pkgs.writeText "u2f-keys" (concatStrings [
+              config.vlake.system.username
+              ":<key-handle>,<user-key>,<cose-type>,<options>"
+              ":<key-handle>,<user-key>,<cose-type>,<options>"
+            ]);
+          };
         };
         services = {
           login.fprintAuth = cfg.enableFingerprint;
@@ -44,7 +54,8 @@ in {
           sudo.u2fAuth = cfg.yubikey.enable;
         };
       };
-      polkit = { enable = true; };
+      polkit.enable = true;
+      rtkit.enable = true;
     };
     services.udev.extraRules = mkIf cfg.yubikey.enable ''
       	ACTION=="remove",\
@@ -66,7 +77,10 @@ in {
       libnotify = false;
       unixSocket = false;
     };
-    environment.systemPackages =
-      mkIf cfg.yubikey.enable (with pkgs; [ yubikey-manager ]);
+    environment.systemPackages = mkMerge [
+      (mkIf cfg.yubikey.enable (with pkgs; [ yubikey-manager ]))
+      (mkIf (cfg.yubikey.enable && config.vlake.gui.enable)
+        (with pkgs; [ yubioath-flutter ]))
+    ];
   };
 }

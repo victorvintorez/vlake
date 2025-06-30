@@ -1,9 +1,9 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.vlake.system.pipewire;
 
   inherit (lib.options) mkEnableOption;
-  inherit (lib.modules) mkIf;
+  inherit (lib.modules) mkIf mkMerge;
 in {
   options.vlake.system.pipewire = {
     enable = mkEnableOption "Enable Pipewire";
@@ -23,6 +23,11 @@ in {
       };
     };
 
-    security.rtkit.enable = true;
+    services.playerctld.enable = true;
+
+    environment.systemPackages = mkMerge [
+      (with pkgs; [ playerctl ])
+      (mkIf config.vlake.gui.enable (with pkgs; [ pwvucontrol qpwgraph ]))
+    ];
   };
 }
