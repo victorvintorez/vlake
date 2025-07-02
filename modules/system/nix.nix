@@ -2,8 +2,6 @@
 let
   cfg = config.vlake.system.nix;
 
-  inherit (config.vlake.system) username;
-
   inherit (lib.options) mkEnableOption;
   inherit (lib.modules) mkIf;
 in {
@@ -14,12 +12,6 @@ in {
   config = mkIf cfg.enable {
     nix = {
       channel.enable = false;
-
-      gc = {
-        automatic = true;
-        dates = "weekly";
-        persistent = true;
-      };
 
       optimise = {
         automatic = true;
@@ -52,6 +44,16 @@ in {
     };
 
     # Nix Tools
-    users.users.${username}.packages = with pkgs; [ nix-index ];
+    programs.nh = {
+      enable = true;
+      flake = config.vlake.system.flake;
+      clean = {
+        enable = true;
+        dates = "weekly";
+        extraArgs = "--keep 5";
+      };
+    };
+
+    environment.systemPackages = with pkgs; [ nix-index ];
   };
 }

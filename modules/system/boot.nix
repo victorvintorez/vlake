@@ -2,19 +2,24 @@
 let
   cfg = config.vlake.system.boot;
 
-  inherit (lib.options) mkEnableOption;
+  inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf;
+  inherit (lib.types) int;
 in {
   options.vlake.system.boot = {
     enable = mkEnableOption "Enable Bootloader";
-    withPlymouth = mkEnableOption "Add Plymouth Bootloader";
-    withWindows = mkEnableOption "Add Windows Boot Entry";
+    timeout = mkOption {
+      type = int;
+      description = "Bootloader Timeout";
+      default = 1;
+    };
+    withPlymouth = mkEnableOption "Add Plymouth Loader";
   };
 
   config = mkIf cfg.enable {
     boot = {
       loader = {
-        timeout = if cfg.withWindows then 5 else 0;
+        timeout = cfg.timeout;
         systemd-boot = {
           enable = true;
           configurationLimit = 5;

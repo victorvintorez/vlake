@@ -6,5 +6,6 @@ _: {
     ./monitors.nix
     ./power.nix
     ./storage.nix
+    ./webcam.nix
   ];
 }

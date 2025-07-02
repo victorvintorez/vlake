@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.vlake.system.fwupd;
 
@@ -9,5 +9,10 @@ in {
     enable = mkEnableOption "Enable Firmware Update Service";
   };
 
-  config = mkIf cfg.enable { services.fwupd = { enable = true; }; };
+  config = mkIf cfg.enable {
+    services.fwupd.enable = true;
+
+    environment.systemPackages =
+      mkIf config.vlake.gui.enable (with pkgs; [ gnome-firmware ]);
+  };
 }

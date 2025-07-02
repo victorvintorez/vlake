@@ -24,6 +24,7 @@ in {
       nixos = {
         enable = true;
         includeAllModules = true;
+        splitBuild = true;
       };
     };
 

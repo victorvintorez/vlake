@@ -8,11 +8,6 @@ let
 in {
   options.vlake.system.ssh = {
     enable = mkEnableOption "Enable SSH Support";
-    allowPasswordAuth = mkOption {
-      description = "Allow Password Auth";
-      type = bool;
-      default = false;
-    };
     withSocketActivation = mkOption {
       description = "Enable Socket Activation";
       type = bool;
@@ -29,10 +24,7 @@ in {
     services.openssh = {
       enable = true;
       startWhenNeeded = cfg.withSocketActivation;
-      settings = {
-        PasswordAuthentication = cfg.allowPasswordAuth;
-        PubkeyAuthOptions = "verify-required";
-      };
+      settings = { PasswordAuthentication = false; };
     };
     programs.ssh = {
       startAgent = true;

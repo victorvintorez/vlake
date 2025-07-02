@@ -49,35 +49,41 @@ in {
         };
         services = {
           login.fprintAuth = cfg.enableFingerprint;
-          sudo.fprintAuth = cfg.enableFingerprint;
           login.u2fAuth = cfg.yubikey.enable;
+          sudo.fprintAuth = cfg.enableFingerprint;
           sudo.u2fAuth = cfg.yubikey.enable;
+          polkit.fprintAuth = cfg.enableFingerprint;
+          polkit.u2fAuth = cfg.yubikey.enable;
         };
       };
       polkit.enable = true;
       rtkit.enable = true;
     };
-    services.udev.extraRules = mkIf cfg.yubikey.enable ''
-      	ACTION=="remove",\
-       	ENV{ID_BUS}=="usb",\
-        ENV{ID_MODEL_ID}=="0407",\
-        ENV{ID_VENDOR_ID}=="1050",\
-        ENV{ID_VENDOR}=="Yubico",\
-        RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
-    '';
+
+    services = {
+      pcscd.enable = cfg.yubikey.enable;
+      fprintd.enable = cfg.enableFingerprint;
+      udev.extraRules = mkIf cfg.yubikey.enable ''
+        	ACTION=="remove",\
+         	ENV{ID_BUS}=="usb",\
+          ENV{ID_MODEL_ID}=="0407",\
+          ENV{ID_VENDOR_ID}=="1050",\
+          ENV{ID_VENDOR}=="Yubico",\
+          RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
+      '';
+    };
 
     systemd.services.fprintd = mkIf cfg.enableFingerprint {
       wantedBy = [ "multi-user.target" ];
       serviceConfig.Type = "simple";
     };
-    services.fprintd.enable = cfg.enableFingerprint;
-
     programs.yubikey-touch-detector = mkIf cfg.yubikey.enable {
       enable = true;
       libnotify = false;
       unixSocket = false;
     };
     environment.systemPackages = mkMerge [
+      (mkIf config.vlake.gui.enable (with pkgs; [ cmd-polkit ]))
       (mkIf cfg.yubikey.enable (with pkgs; [ yubikey-manager ]))
       (mkIf (cfg.yubikey.enable && config.vlake.gui.enable)
         (with pkgs; [ yubioath-flutter ]))
