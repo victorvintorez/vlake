@@ -193,7 +193,7 @@ TODO: Document Yubikey Challenges
 
 ### Cool People
 
-- **[Poz](https://poz.pet):** A large amount of my flake is based off [poz/niksos](https://git.poz.pet/poz/niksos), big props to Poz for the inspiration, and being around to help me out!
+- **[poz](https://poz.pet):** A large amount of my flake is based off [poz/niksos](https://git.poz.pet/poz/niksos), big props to poz for the inspiration, and being around to help me out!
 - **[Esther](https://github.com/esther-ff):** Some cool stuff in [their flake](https://github.com/esther-ff/esthlake) including a simplified version of poz's createHosts function helped me with simplifying the process even further. Also thanks for being around to help out with nix lang stuff.
 - **[NotAShelf](https://github.com/NotAShelf):** README heavily inspired by the formatting of the README in [their flake](https://github.com/NotAShelf/nyx).
 
