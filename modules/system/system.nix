@@ -3,7 +3,7 @@ let
   cfg = config.vlake.system;
 
   inherit (lib.options) mkOption;
-  inherit (lib.types) str;
+  inherit (lib.types) str enum;
   inherit (lib) mkForce;
 in {
   options.vlake.system = {
@@ -19,7 +19,13 @@ in {
 
     platform = mkOption {
       description = "system architecture";
+      type = enum [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+    };
+
+    flake = mkOption {
+      description = "flake location";
       type = str;
+      default = "/home/${cfg.username}/vlake";
     };
 
     flake = mkOption {
