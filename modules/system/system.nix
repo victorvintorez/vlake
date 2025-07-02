@@ -27,12 +27,6 @@ in {
       type = str;
       default = "/home/${cfg.username}/vlake";
     };
-
-    flake = mkOption {
-      description = "flake location";
-      type = str;
-      default = "/home/${cfg.username}/vlake";
-    };
   };
 
   imports = [ inputs.hjem.nixosModules.default ];
