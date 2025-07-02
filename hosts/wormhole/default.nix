@@ -1,5 +1,5 @@
 _: {
-  imports = [ ./disko.nix ];
+  imports = [ ./disko.nix ./hardware-configuration.nix ];
 
   vlake = {
     system = {
