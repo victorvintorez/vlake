@@ -2,6 +2,7 @@
 let
   cfg = config.vlake.system.agenix;
 
+  inherit (config.vlake.system) flake;
   inherit (lib.options) mkEnableOption;
   inherit (lib.modules) mkIf;
   inherit (lib) makeBinPath filter;
@@ -16,8 +17,8 @@ in {
           makeBinPath [ pkgs.age-plugin-yubikey ]
         } ${pkgs.age}/bin/age";
       identityPaths = [
-        "../../secrets/identities/yubikey-supernova.txt"
-        "../../secrets/identities/yubikey-wormhole.txt"
+        "${flake}/secrets/identities/yubikey-supernova.txt"
+        ".${flake}/secrets/identities/yubikey-wormhole.txt"
       ] ++ map (e: e.path)
         (filter (e: e.type == "ed25519") config.services.openssh.hostKeys);
       secrets = { defaultPassword.file = ../../secrets/defaultPassword.age; };
