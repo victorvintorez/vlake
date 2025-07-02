@@ -1,5 +1,5 @@
 <h1 id="header" align="center">
-	<img src="./assets/custom-flake.png" width="256px" height="256px"/>
+	<img src=".github/assets/custom-flake.png" width="256px" height="256px"/>
 	<br/>
 	vlake
 </h1>
@@ -171,7 +171,7 @@ sudo nix run 'github:nix-community/disko/latest#disko-install' -- --flake '.#${H
 ## Showcase
 
 <div align="center">
-	<img src="./assets/example1.png" alt="Example 1" width="600" />
+	<img src=".github/assets/example1.png" alt="Example 1" width="600" />
 </div>
 
 ## Challenges
