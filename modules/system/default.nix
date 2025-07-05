@@ -52,6 +52,7 @@ in {
     users.users.${cfg.username} = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
+      passwordFile = config.age.secrets.defaultPassword.path;
     };
 
     hjem = {

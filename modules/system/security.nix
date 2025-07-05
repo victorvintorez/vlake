@@ -2,6 +2,7 @@
 let
   cfg = config.vlake.system.security;
 
+  inherit (config.vlake.system) username hostname;
   inherit (lib) concatStrings;
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf mkMerge;
@@ -39,9 +40,9 @@ in {
           settings = {
             interactive = false;
             cue = true;
-            origin = "pam://yubico";
+            origin = "pam:${hostname}";
             authfile = pkgs.writeText "u2f-keys" (concatStrings [
-              config.vlake.system.username
+              username
               ":<key-handle>,<user-key>,<cose-type>,<options>"
               ":<key-handle>,<user-key>,<cose-type>,<options>"
             ]);
@@ -63,14 +64,17 @@ in {
     services = {
       pcscd.enable = cfg.yubikey.enable;
       fprintd.enable = cfg.enableFingerprint;
-      udev.extraRules = mkIf cfg.yubikey.enable ''
-        	ACTION=="remove",\
-         	ENV{ID_BUS}=="usb",\
-          ENV{ID_MODEL_ID}=="0407",\
-          ENV{ID_VENDOR_ID}=="1050",\
-          ENV{ID_VENDOR}=="Yubico",\
-          RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
-      '';
+      udev = {
+        packages = with pkgs; [ yubikey-personalization ];
+        extraRules = mkIf cfg.yubikey.enable ''
+          	ACTION=="remove",\
+           	ENV{ID_BUS}=="usb",\
+            ENV{ID_MODEL_ID}=="0407",\
+            ENV{ID_VENDOR_ID}=="1050",\
+            ENV{ID_VENDOR}=="Yubico",\
+            RUN+="${pkgs.systemd}/bin/loginctl lock-sessions"
+        '';
+      };
     };
 
     systemd.services.fprintd = mkIf cfg.enableFingerprint {
