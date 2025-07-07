@@ -4,7 +4,7 @@ let
 
   inherit (lib.options) mkOption;
   inherit (lib.types) str enum;
-  inherit (lib) mkForce;
+  inherit (lib.meta) mkForce;
 in {
   imports = [
     ./agenix.nix

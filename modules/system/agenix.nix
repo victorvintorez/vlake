@@ -5,7 +5,7 @@ let
   inherit (config.vlake.system) flake;
   inherit (lib.options) mkEnableOption;
   inherit (lib.modules) mkIf;
-  inherit (lib) makeBinPath filter;
+  inherit (lib.meta) makeBinPath filter;
 in {
   imports = [ inputs.agenix.nixosModules.default ];
 

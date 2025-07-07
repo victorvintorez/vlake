@@ -3,7 +3,7 @@ let
   cfg = config.vlake.system.security;
 
   inherit (config.vlake.system) username hostname;
-  inherit (lib) concatStrings;
+  inherit (lib.meta) concatStrings;
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf mkMerge;
   inherit (lib.types) submodule enum;

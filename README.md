@@ -202,8 +202,10 @@ TODO: Document Yubikey Challenges
 ### Useful Resources
 
 - **[MyNixOS](https://mynixos.com):** Probably the best place to search nixpkgs and explore NixOS options.
+- **[Noogle](https://noogle.dev):** Super useful search engine for Nix Functions, with documentation and examples.
 - **[NixOS Wiki](https://wiki.nixos.org/wiki/NixOS)**: The official NixOS wiki is a great resource for learning about NixOS, configuring the system, and programs.
 - **[NixOS Discourse](https://discourse.nixos.org/)**: I've found many a fix, and helpful advice from the NixOS forums (especially with the more obscure topics like agenix + yubikeys).
+- **[NixOS Manual](https://nixos.org/manual/nixos/stable/)**: The official NixOS manual is a great resource for learning about NixOS, especially the module system.
 
 ### Super Useful Posts / Guides
 
