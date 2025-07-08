@@ -17,6 +17,7 @@ in {
     mkIf
     (cfg.type == "intel")
     {
+      services.xserver.videoDrivers = [ "modesetting" ];
       boot.initrd.kernelModules = [ "i915" ];
 
       hardware.graphics = {
@@ -24,20 +25,18 @@ in {
         enable32Bit = true;
         extraPackages = with pkgs; [
           mesa
-          libdrm
-          libva
           libva-vdpau-driver
           libvdpau-va-gl
-          intel-vaapi-driver
           intel-media-driver
         ];
         extraPackages32 = with pkgs.driversi686Linux; [
           mesa
+          libva-vdpau-driver
           libvdpau-va-gl
-          intel-vaapi-driver
           intel-media-driver
         ];
       };
+      environment.systemPackages = with pkgs.nvtopPackages; [ intel ];
     }
 
     mkIf
@@ -49,17 +48,20 @@ in {
         graphics = {
           enable = true;
           enable32Bit = true;
+          extraPackages = with pkgs; [ nvidia-vaapi-driver ];
         };
         nvidia = {
           package = config.boot.kernelPackages.nvidiaPackages.latest;
           open = true;
           videoAcceleration = true;
-          nvidiaSettings = true;
+          nvidiaPersistenced = true;
+          nvidiaSettings = false;
           modesetting.enable = true;
           powerManagement.enable = true;
           gsp.enable = true;
         };
       };
+      environment.systemPackages = with pkgs.nvtopPackages; [ nvidia ];
     }
   ];
 }

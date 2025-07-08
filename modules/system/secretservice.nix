@@ -14,6 +14,9 @@ in {
 
     environment.systemPackages = with pkgs; [ libsecret gcr_4 ];
 
+    xdg.portal.config.common."org.freedesktop.impl.portal.Secret" =
+      mkIf config.vlake.gui.enable [ "gnome-keyring" ];
+
     programs.seahorse.enable = config.vlake.gui.enable;
   };
 }

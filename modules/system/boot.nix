@@ -4,7 +4,7 @@ let
 
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf;
-  inherit (lib.types) int;
+  inherit (lib.types) int submodule string listOf package;
 in {
   options.vlake.system.boot = {
     enable = mkEnableOption "Enable Bootloader";
@@ -13,7 +13,24 @@ in {
       description = "Bootloader Timeout";
       default = 1;
     };
-    withPlymouth = mkEnableOption "Add Plymouth Loader";
+    plymouth = mkOption {
+      description = "Plymouth Loader Options";
+      type = submodule {
+        options = {
+          enable = mkEnableOption "Add Plymouth Loader";
+          theme = mkOption {
+            description = "The name of the Theme to use";
+            type = string;
+            default = "spinfinity";
+          };
+          themePackage = mkOption {
+            description = "A custom theme package to use";
+            type = listOf package;
+            default = [ ];
+          };
+        };
+      };
+    };
   };
 
   config = mkIf cfg.enable {
@@ -27,11 +44,15 @@ in {
           memtest86.enable = true;
         };
         efi.canTouchEfiVariables = true;
+        generationsDir.copyKernels = true;
       };
-      plymouth = mkIf cfg.withPlymouth {
+      plymouth = mkIf cfg.plymouth.enable {
         enable = true;
-        theme = "spinfinity";
+        theme = cfg.plymouth.theme;
+        themePackages = cfg.plymouth.themePackage;
       };
+
+      swraid.enable = false;
     };
   };
 }

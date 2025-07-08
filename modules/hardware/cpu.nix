@@ -23,7 +23,7 @@ in {
 
       blacklistedKernelModules = [ "k10temp" ];
       extraModulePackages = [ config.boot.kernelPackages.zenpower ];
-      kernelModules = [ "zenpower" ];
+      kernelModules = [ "amd-pstate" "zenpower" ];
     }
 
     mkIf

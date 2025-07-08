@@ -23,8 +23,17 @@ in {
   config = mkIf cfg.enable {
     services.openssh = {
       enable = true;
+      openFirewall = true;
+      ports = [ 44 ];
       startWhenNeeded = cfg.withSocketActivation;
-      settings = { PasswordAuthentication = false; };
+      settings = {
+        PermitRootLogin = "no";
+        PasswordAuthentication = false;
+        KbdInteractiveAuthentication = false;
+        AuthenticationMethods = "publickey";
+        PubkeyAuthentication = "yes";
+        X11Forwarding = false;
+      };
     };
     programs.ssh = {
       startAgent = true;

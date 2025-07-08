@@ -9,5 +9,5 @@ in {
     enable = mkEnableOption "Enable Thunderbolt Support";
   };
 
-  config = mkIf cfg.enable { hardware.bolt.enable = true; };
+  config = mkIf cfg.enable { services.hardware.bolt.enable = true; };
 }

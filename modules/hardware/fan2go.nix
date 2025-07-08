@@ -16,7 +16,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ fan2go fan2go-tui ];
+    # TODO: Update fan2go package, create and add fan2go-tui package
+    environment.systemPackages = with pkgs; [ fan2go ];
 
     systemd.services.fan2go = {
       description = "Advanced Fan Control program";

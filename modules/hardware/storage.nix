@@ -10,6 +10,8 @@ in {
   };
 
   config = mkIf cfg.enable {
+    boot.supportedFilesystems = [ "btrfs" ];
+
     services = {
       btrfs.autoScrub = {
         enable = true;
@@ -23,6 +25,14 @@ in {
         enable = true;
         autodetect = true;
       };
+
+      lvm.enable = false;
+
+      journald.extraConfig = ''
+        	SystemMaxUse=100M
+         	RuntimeMaxUse=50M
+          SystemMaxFileSize=50M
+      '';
     };
 
     fileSystems."/boot".options = [ "nodev" "nosuid" "noexec" ];
