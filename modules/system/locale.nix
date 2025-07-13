@@ -16,7 +16,21 @@ in {
   };
 
   config = mkIf cfg.enable {
+    chrony.enable = false;
+    timesyncd = {
+      enable = true;
+      servers = [
+        "0.europe.pool.ntp.org"
+        "1.europe.pool.ntp.org"
+        "2.europe.pool.ntp.org"
+        "3.europe.pool.ntp.org"
+      ];
+      extraConfig = ''
+        PollIntervalMinSec=128
+      '';
+    };
     time.timeZone = cfg.timezone;
+
     i18n = rec {
       defaultLocale = "en_US.UTF-8";
       extraLocales = [ "en_GB.UTF-8/UTF-8" "nb_NO.UTF-8/UTF-8" ];

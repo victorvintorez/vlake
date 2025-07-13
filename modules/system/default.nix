@@ -51,7 +51,18 @@ in {
 
     users.users.${cfg.username} = {
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      createHome = true;
+      home = "/home/${cfg.username}";
+      extraGroups = [
+        "wheel"
+        "systemd-journal"
+        "audio"
+        "video"
+        "input"
+        "plugdev"
+        "power"
+        "networkmanager"
+      ];
       passwordFile = config.age.secrets.defaultPassword.path;
     };
 
