@@ -26,7 +26,7 @@ in {
     services.playerctld.enable = true;
 
     environment.systemPackages = mkMerge [
-      (with pkgs; [ playerctl ])
+      (with pkgs; [ playerctl alsa-utils ])
       (mkIf config.vlake.gui.enable (with pkgs; [ pwvucontrol qpwgraph ]))
     ];
   };

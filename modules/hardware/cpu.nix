@@ -31,7 +31,7 @@ in {
     {
       hardware.cpu.intel.updateMicrocode = true;
 
-      # thermald or throttled?
+      services.thermald.enable = true;
     }
   ];
 }

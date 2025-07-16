@@ -23,6 +23,7 @@ in {
         };
       };
     };
+    useSudoRs = mkEnableOption "Use sudo-rs instead of sudo";
   };
 
   config = mkIf cfg.enable {
@@ -48,6 +49,28 @@ in {
             ]);
           };
         };
+        sudo-rs = mkIf cfg.useSudoRs {
+          enable = true;
+          extraRules = [{
+            groups = [ "wheel" ];
+            commands = [
+              {
+                command = "${pkgs.systemd}/bin/systemctl suspend";
+                options = [ "NOPASSWD" ];
+              }
+              {
+                command = "${pkgs.systemd}/bin/reboot";
+                options = [ "NOPASSWD" ];
+              }
+              {
+                command = "${pkgs.systemd}/bin/poweroff";
+                options = [ "NOPASSWD" ];
+              }
+            ];
+          }];
+        };
+        polkit.enable = true;
+        rtkit.enable = true;
         services = {
           login.fprintAuth = cfg.enableFingerprint;
           login.u2fAuth = cfg.yubikey.enable;
@@ -57,8 +80,7 @@ in {
           polkit.u2fAuth = cfg.yubikey.enable;
         };
       };
-      polkit.enable = true;
-      rtkit.enable = true;
+
     };
 
     services = {

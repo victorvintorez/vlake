@@ -1,12 +1,10 @@
 { config, lib, ... }:
 let
-  cfg = config.vlake.services.tailscale;
+  cfg = config.vlake.cli.git;
   inherit (lib.options) mkEnableOption;
   inherit (lib.meta) mkIf;
 in {
-  options.vlake.services.tailscale = {
-    enable = mkEnableOption "Enable Tailscale";
-  };
+  options.vlake.cli.git = { enable = mkEnableOption "Enable Git"; };
 
   config = mkIf cfg.enable {
     # Something

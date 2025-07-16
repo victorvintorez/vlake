@@ -2,7 +2,7 @@
 let
   cfg = config.vlake.hardware.fan2go;
 
-  inherit (lib.meta) getExe';
+  inherit (lib.meta) getExe;
   inherit (lib.options) mkEnableOption mkOption;
   inherit (lib.modules) mkIf;
   inherit (lib.types) path;
@@ -26,8 +26,7 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart =
-          "${getExe' pkgs.fan2go "fan2go"} -c ${cfg.config} --no-style";
+        ExecStart = "${getExe pkgs.fan2go} -c ${cfg.config} --no-style";
       };
     };
   };
